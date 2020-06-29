@@ -5,6 +5,33 @@ WorldBossAttendance_Addon=WBA
 function WBA.OnLoad()	
     WBA_print("loaded!")
 end
+
+function WBA.HideWindow()
+	WorldBossAttendanceFrame:Hide()
+end
+function WBA.ShowWindow()
+	WorldBossAttendanceFrame:Show()
+end
+function WBA.ToggleWindow()
+	if WorldBossAttendanceFrame:IsVisible() then
+		WBA.HideWindow()
+	else
+		WBA.ShowWindow()
+	end
+end
+
+function WBA.BtnClose()
+    WBA.HideWindow()
+end
+
+
+
+SLASH_WBA1 = "/wba" -- For quicker access to frame stack
+SlashCmdList.WBA = function()
+    WBA.ToggleWindow()
+end
+
+
 ---------------------------------------------------------
 -- debugging utilies
 ---------------------------------------------------------

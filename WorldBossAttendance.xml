@@ -15,6 +15,9 @@
       <OnLoad>
         WorldBossAttendance_Addon.OnLoad()
       </OnLoad>
+      <!-- <OnSizeChanged>
+				WorldBossAttendance_Addon.OnSizeChanged()
+			</OnSizeChanged> -->
     </Scripts>
 
     <Backdrop name="$parentBackdrop" bgFile="Interface\TutorialFrame\TutorialFrameBackground" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
@@ -41,9 +44,9 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<!-- <OnClick>
+					<OnClick>
 						 WorldBossAttendance_Addon.BtnClose()
-					</OnClick> -->
+					</OnClick>
 				</Scripts>
 			</Button>
     </Frames>

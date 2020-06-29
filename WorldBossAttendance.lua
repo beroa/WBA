@@ -2,9 +2,21 @@
 local TOCNAME,WBA=...
 WorldBossAttendance_Addon=WBA
 
-function WBA.OnLoad()	
+function WBA.OnLoad()
     WBA_print("loaded!")
+    WorldBossAttendanceFrame:SetMinResize(300,170)
+
+    WBA.ResizeFrameList()
+    
+    SLASH_WBA1 = "/wba" -- For quicker access to frame stack
+    SlashCmdList.WBA = function()
+        WBA.ToggleWindow()
+    end
+
+    WBA.Tool.EnableSize(WorldBossAttendanceFrame,16,nil,WBA.ResizeFrameList())
+    WBA.Tool.EnableMoving(WorldBossAttendanceFrame)
 end
+
 
 function WBA.HideWindow()
 	WorldBossAttendanceFrame:Hide()
@@ -20,10 +32,24 @@ function WBA.ToggleWindow()
 	end
 end
 
+
 function WBA.BtnClose()
     WBA.HideWindow()
 end
 
+function WBA.OnSizeChanged()
+	if WBA.Initalized==true then
+		WBA.ResizeFrameList()
+	end
+end
+
+function WBA.ResizeFrameList()
+	local w
+	WorldBossAttendanceFrame_DisplayFrame:SetHeight(WorldBossAttendanceFrame:GetHeight() -30-11)
+	w=WorldBossAttendanceFrame:GetWidth() -20-10-10
+	WorldBossAttendanceFrame_DisplayFrame:SetWidth( w )
+	-- WorldBossAttendanceFrame_ScrollChildFrame:SetWidth( w )
+end
 
 
 SLASH_WBA1 = "/wba" -- For quicker access to frame stack

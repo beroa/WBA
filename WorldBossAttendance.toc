@@ -2,5 +2,9 @@
 ## Title: WorldBoss Attendance
 ## Notes: Guild Viewer, sorts by location. For world boss attendance.
 
+LibGPIOptions.lua
+LibGPIMinimapButton.lua
+LibGPIToolBox.lua
+
 WorldBossAttendance.lua
 WorldBossAttendance.xml

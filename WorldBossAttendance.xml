@@ -2,25 +2,16 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
          xsi:schemaLocation="http://www.blizzard.com/wow/ui/ 
          ..\..\FrameXML\UI.xsd">
-  <Script File="WorldBossAttendance.lua"/>
+
   
-  <Frame name="WorldBossAttendanceFrame" parent="UIParent" hidden="false" movable="true" enableMouse="true" frameStrata="LOW" resizable="true">
+  <Frame name="WorldBossAttendanceFrame" parent="UIParent" hidden="true" movable="true" enableMouse="true" frameStrata="LOW" resizable="true">
     <Size><AbsDimension x="800" y="600"/></Size>
     <Anchors>
 			<Anchor point="CENTER"/>
 			<Offset><AbsDimension x="300" y="0"/></Offset>
 		</Anchors>
 
-    <Scripts>
-      <OnLoad>
-        WorldBossAttendance_Addon.OnLoad()
-      </OnLoad>
-      <!-- <OnSizeChanged>
-				WorldBossAttendance_Addon.OnSizeChanged()
-			</OnSizeChanged> -->
-    </Scripts>
-
-    <Backdrop name="$parentBackdrop" bgFile="Interface\TutorialFrame\TutorialFrameBackground" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+    <Backdrop name="$parentBackdrop" bgFile="Interface\FrameGeneral\UI-Background-Rock" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="false">
 			<EdgeSize>
 				<AbsValue val="16"/>
 			</EdgeSize>
@@ -32,9 +23,29 @@
 			</BackgroundInsets>
 		</Backdrop>	
 
-    <Frames>			
-			<!-- default gui elements -->
-			
+		<Layers>
+			<Layer level="BACKGROUND">
+				<FontString name="$parentTitle" inherits="GameFontNormal" text="WBA: Guild View" maxLines="1" justifyH="LEFT" justifyV="TOP">
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset>
+								<AbsDimension x="10" y="-10"/>
+							</Offset>
+						</Anchor>
+						<Anchor point="BOTTOMRIGHT" relativePoint="TOPRIGHT">
+							<Offset>
+								<AbsDimension x="-10" y="-30"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+
+      <!-- TODO: Display Time (realm)-->
+
+			</Layer>
+		</Layers>
+
+    <Frames>
 			<Button name="$parentCloseButton" inherits="GroupBulletinBoard_MiniButton" Text="|TInterface\Buttons\UI-StopButton:0|t">
 				<Anchors>
 					<Anchor point="TOPRIGHT" relativeTo="$parent" relativePoint="TOPRIGHT">
@@ -49,10 +60,37 @@
 					</OnClick>
 				</Scripts>
 			</Button>
+
+      <Frame name="WorldBossAttendanceFrame_DisplayFrame">
+				<Backdrop name="$parentBackdrop" bgFile="Interface\FrameGeneral\UI-Background-Marble" tile="false">
+					<BackgroundInsets>
+						<AbsInset left="-3" right="-23" top="-3" bottom="-3"/>
+					</BackgroundInsets>
+				</Backdrop>	
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="10" y="-30"/>
+						</Offset>						
+					</Anchor>				
+				</Anchors>
+				<Size>
+					<AbsDimension x="800" y="600"/>
+				</Size>
+			</Frame>
+
     </Frames>
+    
 	  
 
-    
+    <Scripts>
+      <OnLoad>
+        WorldBossAttendance_Addon.OnLoad()
+      </OnLoad>
+      <OnSizeChanged>
+				WorldBossAttendance_Addon.OnSizeChanged()
+			</OnSizeChanged>
+    </Scripts>
 
   </Frame>
 </Ui>

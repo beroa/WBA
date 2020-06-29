@@ -1,0 +1,6 @@
+## Interface: 11303
+## Title: WorldBoss Attendance
+## Notes: Guild Viewer, sorts by location. For world boss attendance.
+
+WorldBossAttendance.lua
+WorldBossAttendance.xml

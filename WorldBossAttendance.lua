@@ -13,7 +13,10 @@ function WBA.OnLoad()
         WBA.ToggleWindow()
     end
 
-    WBA.Tool.EnableSize(WorldBossAttendanceFrame,16,nil,WBA.ResizeFrameList())
+    WBA.Tool.EnableSize(WorldBossAttendanceFrame,16,nil,function() -- Resizing with LibGPI
+		WBA.ResizeFrameList()
+		end
+    )
     WBA.Tool.EnableMoving(WorldBossAttendanceFrame)
 end
 

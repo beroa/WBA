@@ -3,15 +3,21 @@
          xsi:schemaLocation="http://www.blizzard.com/wow/ui/ 
          ..\..\FrameXML\UI.xsd">
 
-  
-  <Frame name="WorldBossAttendanceFrame" parent="UIParent" hidden="true" movable="true" enableMouse="true" frameStrata="LOW" resizable="true">
-    <Size><AbsDimension x="800" y="600"/></Size>
-    <Anchors>
+	<Button name="WorldBossAttendance_MiniButton" inherits="UIPanelButtonTemplate" virtual="true">
+		<NormalFont style="GameFontNormalSmall"/>
+		<HighlightFont style="GameFontHighlightSmall"/>
+		<DisabledFont style="GameFontDisableSmall"/>
+		<Size><AbsDimension x="20" y="18"/></Size>
+	</Button>
+
+	<Frame name="WorldBossAttendanceFrame" parent="UIParent" hidden="true" movable="true" enableMouse="true" frameStrata="LOW" resizable="true">
+		<Size><AbsDimension x="800" y="600"/></Size>
+		<Anchors>
 			<Anchor point="CENTER"/>
 			<Offset><AbsDimension x="300" y="0"/></Offset>
 		</Anchors>
 
-    <Backdrop name="$parentBackdrop" bgFile="Interface\FrameGeneral\UI-Background-Rock" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="false">
+		<Backdrop name="$parentBackdrop" bgFile="Interface\TutorialFrame\TutorialFrameBackground" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="false">
 			<EdgeSize>
 				<AbsValue val="16"/>
 			</EdgeSize>
@@ -25,6 +31,7 @@
 
 		<Layers>
 			<Layer level="BACKGROUND">
+
 				<FontString name="$parentTitle" inherits="GameFontNormal" text="WBA: Guild View" maxLines="1" justifyH="LEFT" justifyV="TOP">
 					<Anchors>
 						<Anchor point="TOPLEFT">
@@ -40,12 +47,12 @@
 					</Anchors>
 				</FontString>
 
-      <!-- TODO: Display Time (realm)-->
+				<!-- TODO: Display Time (realm)-->
 
 			</Layer>
 		</Layers>
 
-    <Frames>
+		<Frames>
 			<Button name="$parentCloseButton" inherits="GroupBulletinBoard_MiniButton" Text="|TInterface\Buttons\UI-StopButton:0|t">
 				<Anchors>
 					<Anchor point="TOPRIGHT" relativeTo="$parent" relativePoint="TOPRIGHT">
@@ -56,13 +63,14 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 WorldBossAttendance_Addon.BtnClose()
+							WorldBossAttendance_Addon.BtnClose()
 					</OnClick>
 				</Scripts>
 			</Button>
 
-      <Frame name="WorldBossAttendanceFrame_DisplayFrame">
-				<Backdrop name="$parentBackdrop" bgFile="Interface\FrameGeneral\UI-Background-Marble" tile="false">
+			<!--Scrollframe -->
+			<ScrollFrame name="WorldBossAttendanceFrame_ScrollFrame" inherits="UIPanelScrollFrameTemplate">
+				<Backdrop name="$parentBackdrop" bgFile="Interface\TutorialFrame\TutorialFrameBackground" tile="true">
 					<BackgroundInsets>
 						<AbsInset left="-3" right="-23" top="-3" bottom="-3"/>
 					</BackgroundInsets>
@@ -75,22 +83,52 @@
 					</Anchor>				
 				</Anchors>
 				<Size>
-					<AbsDimension x="800" y="600"/>
+					<AbsDimension x="100" y="100"/>
 				</Size>
-			</Frame>
+				<ScrollChild>
+					<Frame name="WorldBossAttendanceFrame_ScrollChildFrame">
+						<Size>
+							<AbsDimension x="100" y="100"/>
+						</Size>
+					</Frame>
+				</ScrollChild>
+			</ScrollFrame> -->
 
-    </Frames>
-    
-	  
+			<!-- groupframe -->
+			<ScrollingMessageFrame enableMouseWheel="true" name="WorldBossAttendanceFrame_GuildieFrame"  parentKey="MessageFrame" enableMouseClicks="true" >
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="10" y="-30"/>
+						</Offset>
+					</Anchor>
+					<Anchor point="BOTTOMRIGHT">
+						<Offset>
+							<AbsDimension x="-10" y="30"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Size>
+					<AbsDimension x="100" y="1000"/>
+				</Size>
+				<Scripts>
+					<OnMouseWheel>
+						WorldBossAttendance_Addon.ScrollGroupList(self,delta)
+					</OnMouseWheel>
+				</Scripts>
+						
+			</ScrollingMessageFrame>
+		</Frames>
 
-    <Scripts>
-      <OnLoad>
-        WorldBossAttendance_Addon.OnLoad()
-      </OnLoad>
-      <OnSizeChanged>
+
+		<Scripts>
+			<OnLoad>
+				WorldBossAttendance_Addon.OnLoad()
+			</OnLoad>
+			<OnSizeChanged>
 				WorldBossAttendance_Addon.OnSizeChanged()
 			</OnSizeChanged>
-    </Scripts>
+		</Scripts>
 
-  </Frame>
+	</Frame>
 </Ui>

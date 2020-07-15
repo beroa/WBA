@@ -17,7 +17,7 @@
 			<Offset><AbsDimension x="300" y="0"/></Offset>
 		</Anchors>
 
-		<Backdrop name="$parentBackdrop" bgFile="Interface\TutorialFrame\TutorialFrameBackground" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="false">
+		<Backdrop name="$parentBackdrop" bgFile="Interface\TutorialFrame\TutorialFrameBackground" edgeFile="Interface\DialogFrame\UI-DialogBox-Gold-Border" tile="true">
 			<EdgeSize>
 				<AbsValue val="16"/>
 			</EdgeSize>
@@ -53,7 +53,7 @@
 		</Layers>
 
 		<Frames>
-			<Button name="$parentCloseButton" inherits="GroupBulletinBoard_MiniButton" Text="|TInterface\Buttons\UI-StopButton:0|t">
+			<Button name="$parentCloseButton" inherits="WorldBossAttendance_MiniButton" Text="|TInterface\Buttons\UI-StopButton:0|t">
 				<Anchors>
 					<Anchor point="TOPRIGHT" relativeTo="$parent" relativePoint="TOPRIGHT">
 						<Offset>

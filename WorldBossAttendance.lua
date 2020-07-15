@@ -1,6 +1,8 @@
 local TOCNAME,WBA=...
 WorldBossAttendance_Addon=WBA
 
+
+WBA.Initalized = false;
 function WBA.OnLoad()
     WBA_print("loaded!")
 
@@ -16,6 +18,8 @@ function WBA.OnLoad()
 		end
     )
     WBA.Tool.EnableMoving(WorldBossAttendanceFrame)
+
+    WBA.Initalized = true;
 end
 
 

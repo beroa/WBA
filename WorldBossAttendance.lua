@@ -3,8 +3,83 @@ WorldBossAttendance_Addon=WBA
 
 
 WBA.Initalized = false;
+WBA.AutoUpdateTimer=0
+WBA.UPDATETIMER=5
+
+guildies = {}
+
+function WBA.SaveAnchors()
+	WBA.DB.X = GroupBulletinBoardFrame:GetLeft()
+	WBA.DB.Y = GroupBulletinBoardFrame:GetTop()
+	WBA.DB.Width = GroupBulletinBoardFrame:GetWidth()
+	WBA.DB.Height = GroupBulletinBoardFrame:GetHeight()
+end
+
+function WBA.Init()
+	WorldBossAttendanceFrame:SetMinResize(300,170)	
+	
+	WBA.UserLevel=UnitLevel("player")
+	WBA.UserName=(UnitFullName("player"))
+	WBA.ServerName=GetRealmName()
+
+	DEFAULT_CHAT_FRAME:AddMessage("init ran")
+		
+	-- Initalize options
+	if not WorldBossAttendanceDB then WorldBossAttendanceDB = {} end -- fresh DB
+	if not WorldBossAttendanceDBChar then WorldBossAttendanceDBChar = {} end -- fresh DB
+	
+	WBA.DB=WorldBossAttendanceDB
+	WBA.DBChar=WorldBossAttendanceDBChar
+	
+	if WBA.DB.OnDebug == nil then WBA.DB.OnDebug=false end
+	WBA.DB.widthNames=93 
+	WBA.DB.widthTimes=50 
+	
+	
+	-- Reset Request-List
+	WBA.RequestList={}
+	WBA.FramesEntries={}
+	
+	-- Timer-Stuff
+	WBA.MAXTIME=time()+60*60*24*365 --add a year!
+	
+	WBA.ClearNeeded=true
+	WBA.ClearTimer=WBA.MAXTIME	
+	
+		
+	local x, y, w, h = WBA.DB.X, WBA.DB.Y, WBA.DB.Width, WBA.DB.Height
+	if not x or not y or not w or not h then
+		WBA.SaveAnchors()
+	else
+		WorldBossAttendanceFrame:ClearAllPoints()
+		WorldBossAttendanceFrame:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT", x, y)
+		WorldBossAttendanceFrame:SetWidth(w)
+		WorldBossAttendanceFrame:SetHeight(h)		
+	end
+	
+	WBA.ResizeFrameList()
+	
+	WBA.Tool.EnableSize(WorldBossAttendanceFrame,8,nil,function()	
+		WBA.ResizeFrameList()
+		WBA.SaveAnchors()
+		WBA.UpdateList()
+		end
+	)
+	WBA.Tool.EnableMoving(WorldBossAttendanceFrame,WBA.SaveAnchors)
+	
+	WBA.Initalized=true
+	
+end
+
+local function Event_ADDON_LOADED(arg1)
+	if arg1 == TOCNAME then
+		WBA.Init()
+	end
+end
+
 function WBA.OnLoad()
-    WBA_print("loaded!")
+	WBA_print("loaded!")
+	WBA.Tool.RegisterEvent("ADDON_LOADED",Event_ADDON_LOADED)
 
     SLASH_WBA1 = "/wba"
     SlashCmdList.WBA = function()
@@ -18,16 +93,27 @@ function WBA.OnLoad()
 		end
     )
     WBA.Tool.EnableMoving(WorldBossAttendanceFrame)
+    WBA.Initalized = true
 
-    WBA.Initalized = true;
+    WBA.Tool.OnUpdate(WBA.OnUpdate)
 end
 
+function WBA.OnUpdate()
+	-- if WBA.Initalized==true then
+	-- 	if WBA.AutoUpdateTimer<time() or WBA.ClearNeeded then			
+	-- 		WBA.UpdateList()			
+	-- 	end	
+	-- end
+end
 
 function WBA.HideWindow()
 	WorldBossAttendanceFrame:Hide()
 end
 function WBA.ShowWindow()
 	WorldBossAttendanceFrame:Show()
+	WBA.ClearNeeded=true	 
+	WBA.UpdateList()
+	WBA.ResizeFrameList()
 end
 function WBA.ToggleWindow()
 	if WorldBossAttendanceFrame:IsVisible() then
@@ -36,7 +122,6 @@ function WBA.ToggleWindow()
 		WBA.ShowWindow()
 	end
 end
-
 
 function WBA.BtnClose()
     WBA.HideWindow()
@@ -55,13 +140,6 @@ function WBA.ResizeFrameList()
 	WorldBossAttendanceFrame_ScrollFrame:SetWidth( w )
 	WorldBossAttendanceFrame_ScrollChildFrame:SetWidth( w )
 end
-
-
-SLASH_WBA1 = "/wba" -- For quicker access to frame stack
-SlashCmdList.WBA = function()
-    WBA.ToggleWindow()
-end
-
 
 ---------------------------------------------------------
 -- debugging utilies

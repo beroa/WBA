@@ -68,7 +68,6 @@
 				</Scripts>
 			</Button>
 
-			<!--Scrollframe -->
 			<ScrollFrame name="WorldBossAttendanceFrame_ScrollFrame" inherits="UIPanelScrollFrameTemplate">
 				<Backdrop name="$parentBackdrop" bgFile="Interface\TutorialFrame\TutorialFrameBackground" tile="true">
 					<BackgroundInsets>
@@ -92,10 +91,9 @@
 						</Size>
 					</Frame>
 				</ScrollChild>
-			</ScrollFrame> -->
+			</ScrollFrame>
 
-			<!-- groupframe -->
-			<ScrollingMessageFrame enableMouseWheel="true" name="WorldBossAttendanceFrame_GuildieFrame"  parentKey="MessageFrame" enableMouseClicks="true" >
+			<!-- <ScrollingMessageFrame enableMouseWheel="true" name="WorldBossAttendanceFrame_GuildieFrame"  parentKey="MessageFrame" enableMouseClicks="true" >
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset>
@@ -117,10 +115,8 @@
 					</OnMouseWheel>
 				</Scripts>
 						
-			</ScrollingMessageFrame>
+			</ScrollingMessageFrame> -->
 		</Frames>
-
-
 		<Scripts>
 			<OnLoad>
 				WorldBossAttendance_Addon.OnLoad()
@@ -129,6 +125,29 @@
 				WorldBossAttendance_Addon.OnSizeChanged()
 			</OnSizeChanged>
 		</Scripts>
-
 	</Frame>
+
+	<Frame hidden="false" name="WorldBossAttendance_TmpRequest" virtual="true">
+		<Layers>
+			<Layer level="ARTWORK">				
+				<FontString name="$parent_message" text="samplemsg" inherits="GameFontNormal" maxLines="1" justifyH="LEFT" justifyV="TOP">
+					<color b="1" g="1" r="1" a="1"/>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnMouseDown>
+				<!-- WorldBossAttendance_Addon.ClickRequest(self,button) -->
+			</OnMouseDown>
+			<OnEnter>
+				<!-- WorldBossAttendance_Addon.RequestShowTooltip(self) -->
+			</OnEnter>
+			<OnLeave>
+				<!-- WorldBossAttendance_Addon.RequestHideTooltip(self) -->
+			</OnLeave>					
+		</Scripts>
+		
+	</Frame>	
+
+
 </Ui>

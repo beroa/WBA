@@ -9,3 +9,5 @@ LibGPIToolBox.lua
 
 WorldBossAttendance.lua
 WorldBossAttendance.xml
+RequestList.lua
+GuildList.lua

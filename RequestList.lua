@@ -23,7 +23,7 @@ function WBA.Clear()
 end
 
 -- yy is the items height, used in setting the height of the ScrollChildFrame
-local function CreateItem(yy, i, hidden, forceHeight)
+local function CreateItem(yy, i, req, hidden, forceHeight)
     local AnchorTop="WorldBossAttendanceFrame_ScrollChildFrame"
 	local AnchorRight="WorldBossAttendanceFrame_ScrollChildFrame"
     local ItemFrameName="WBA.Item_"..i
@@ -41,7 +41,12 @@ local function CreateItem(yy, i, hidden, forceHeight)
 
 	WBA.FramesEntries[i]:SetHeight(999)
 	_G[ItemFrameName.."_message"]:SetHeight(999)
-	_G[ItemFrameName.."_message"]:SetText("hi "..i)
+
+	
+	if req then
+		WBA_print("hi "..req.name..req.zone)
+		_G[ItemFrameName.."_message"]:SetText(req.name.. " "..req.zone)
+	end
 
 	local h = _G[ItemFrameName.."_message"]:GetStringHeight()
 
@@ -70,6 +75,8 @@ function WBA.UpdateList()
 		return
 	end
 	WBA_print("updating!")
+
+	WBA.GuildList = GetGuildiesOnline()
 	
 	for i, f in pairs(WBA.FramesEntries) do
 		f:Hide()
@@ -81,13 +88,13 @@ function WBA.UpdateList()
 	local count=0
 	local doCompact=1
 
-    local itemHeight = CreateItem(yy,0,true,nil)
+    local itemHeight = CreateItem(yy,0,nil,true,nil)
 	WorldBossAttendanceFrame_ScrollFrame.ScrollBar.scrollStep=itemHeight*2
 	
-	-- fill the list with dummy data
-    NUM_guildies = 50
-    for i = 1, NUM_guildies do
-        yy=yy+CreateItem(yy,i,false,itemHeight)+3
+	-- fill the list
+	for i, req in pairs(WBA.GuildList) do
+		WBA_print(dump(req))
+        yy=yy+CreateItem(yy,i,req,false,itemHeight)+3
 	end
 	
 	WorldBossAttendanceFrame_ScrollChildFrame:SetHeight(yy)

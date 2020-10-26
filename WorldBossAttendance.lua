@@ -6,7 +6,9 @@ WBA.Initalized = false;
 WBA.AutoUpdateTimer=0
 WBA.UPDATETIMER=5
 
-TrackedZones = {"Ashenvale", "Feralas", "The Hinterlands", "Duskwood", "Azshara", "Blasted Lands"}
+WBA.GuildList = {}
+WBA.TrackedZonesList = {"Ashenvale", "Feralas", "The Hinterlands", "Duskwood", "Azshara", "Blasted Lands", "Stormwind City"}
+WBA.TrackedZones = {}
 
 function WBA.SaveAnchors()
 	WBA.DB.X = WorldBossAttendanceFrame:GetLeft()
@@ -45,6 +47,10 @@ function WBA.Init()
 	
 	WBA.ClearNeeded=true
 	WBA.ClearTimer=WBA.MAXTIME
+
+	for k, v in pairs(WBA.TrackedZonesList) do
+		WBA.TrackedZones[v] = 1
+	end
 		
 	local x, y, w, h = WBA.DB.X, WBA.DB.Y, WBA.DB.Width, WBA.DB.Height
 	if not x or not y or not w or not h then
@@ -154,9 +160,6 @@ SlashCmdList.RELOADUI = function()
     ReloadUI()
 end
 
----------------------------------------------------------
--- old code 
----------------------------------------------------------
 function GetGuildiesOnline() -- Makes the GuildRoster request and prints the guildies + locations
     GuildRoster()
 
@@ -166,19 +169,23 @@ function GetGuildiesOnline() -- Makes the GuildRoster request and prints the gui
     numTotalGuildMembers, numOnlineGuildMembers, numOnlineAndMobileMembers = GetNumGuildMembers();
     for i=1, numOnlineGuildMembers do
         name, rankName, rankIndex, level, classDisplayName, zone, publicNote, officerNote, isOnline, status, class, achievementPoints, achievementRank, isMobile, canSoR, repStanding, GUID = GetGuildRosterInfo(i)
-        wba_history_snap_row = {};
-        wba_history_snap_row.name = name;
-        wba_history_snap_row.zone = zone;
-        wba_history_snap_row.class = class;
-        
-        wba_history_snap[GUID] = wba_history_snap_row;
+		if WBA.TrackedZones[zone] ~= nil then
+			
+		
+			wba_history_snap_row = {};
+			wba_history_snap_row.name = StripServerName(name);
+			wba_history_snap_row.zone = zone;
+			wba_history_snap_row.class = class;
+			
+			wba_history_snap[GUID] = wba_history_snap_row;
+		end
         -- print("row: " .. dump(wba_history_snap_row))
         WBA_print("CHAR: " .. trim(tostring(name)) .. " ZONE: " .. tostring(zone))
     end
     
     --Todo: add metadata
 
-    print(dump(wba_history_snap))
+    -- print(dump(wba_history_snap))
     return wba_history_snap;
 end
 

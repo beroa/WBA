@@ -6,13 +6,13 @@ WBA.Initalized = false;
 WBA.AutoUpdateTimer=0
 WBA.UPDATETIMER=5
 
-guildies = {}
+TrackedZones = {"Ashenvale", "Feralas", "The Hinterlands", "Duskwood", "Azshara", "Blasted Lands"}
 
 function WBA.SaveAnchors()
-	WBA.DB.X = GroupBulletinBoardFrame:GetLeft()
-	WBA.DB.Y = GroupBulletinBoardFrame:GetTop()
-	WBA.DB.Width = GroupBulletinBoardFrame:GetWidth()
-	WBA.DB.Height = GroupBulletinBoardFrame:GetHeight()
+	WBA.DB.X = WorldBossAttendanceFrame:GetLeft()
+	WBA.DB.Y = WorldBossAttendanceFrame:GetTop()
+	WBA.DB.Width = WorldBossAttendanceFrame:GetWidth()
+	WBA.DB.Height = WorldBossAttendanceFrame:GetHeight()
 end
 
 function WBA.Init()
@@ -35,17 +35,16 @@ function WBA.Init()
 	WBA.DB.widthNames=93 
 	WBA.DB.widthTimes=50 
 	
-	
 	-- Reset Request-List
 	WBA.RequestList={}
 	WBA.FramesEntries={}
 	
 	-- Timer-Stuff
 	WBA.MAXTIME=time()+60*60*24*365 --add a year!
+	WBA.AutoUpdateTimer=time()+WBA.UPDATETIMER
 	
 	WBA.ClearNeeded=true
-	WBA.ClearTimer=WBA.MAXTIME	
-	
+	WBA.ClearTimer=WBA.MAXTIME
 		
 	local x, y, w, h = WBA.DB.X, WBA.DB.Y, WBA.DB.Width, WBA.DB.Height
 	if not x or not y or not w or not h then
@@ -66,9 +65,7 @@ function WBA.Init()
 		end
 	)
 	WBA.Tool.EnableMoving(WorldBossAttendanceFrame,WBA.SaveAnchors)
-	
 	WBA.Initalized=true
-	
 end
 
 local function Event_ADDON_LOADED(arg1)
@@ -78,7 +75,6 @@ local function Event_ADDON_LOADED(arg1)
 end
 
 function WBA.OnLoad()
-	WBA_print("loaded!")
 	WBA.Tool.RegisterEvent("ADDON_LOADED",Event_ADDON_LOADED)
 
     SLASH_WBA1 = "/wba"
@@ -98,12 +94,15 @@ function WBA.OnLoad()
     WBA.Tool.OnUpdate(WBA.OnUpdate)
 end
 
+
 function WBA.OnUpdate()
-	-- if WBA.Initalized==true then
-	-- 	if WBA.AutoUpdateTimer<time() or WBA.ClearNeeded then			
-	-- 		WBA.UpdateList()			
-	-- 	end	
-	-- end
+	if WBA.Initalized==true then
+		-- WBA_print(WBA.AutoUpdateTimer)
+		-- WBA_print("cur: "..time())
+		if WBA.AutoUpdateTimer<time() then-- or WBA.ClearNeeded then			
+			WBA.UpdateList()			
+		end	
+	end
 end
 
 function WBA.HideWindow()

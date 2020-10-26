@@ -64,10 +64,12 @@ end
 
 function WBA.UpdateList()
 	WBA.Clear()
+	WBA.AutoUpdateTimer=time()+WBA.UPDATETIMER
 	
-	if not WorldBossAttendanceFrame:IsVisible()  then
+	if not WorldBossAttendanceFrame:IsVisible() then
 		return
 	end
+	WBA_print("updating!")
 	
 	for i, f in pairs(WBA.FramesEntries) do
 		f:Hide()
@@ -89,5 +91,6 @@ function WBA.UpdateList()
 	end
 	
 	WorldBossAttendanceFrame_ScrollChildFrame:SetHeight(yy)
+
 end
 

@@ -179,8 +179,6 @@ function GetGuildiesOnline() -- Makes the GuildRoster request and prints the gui
 			
 			wba_history_snap[GUID] = wba_history_snap_row;
 		end
-        -- print("row: " .. dump(wba_history_snap_row))
-        WBA_print("CHAR: " .. trim(tostring(name)) .. " ZONE: " .. tostring(zone))
     end
     
     --Todo: add metadata

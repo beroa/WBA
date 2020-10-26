@@ -44,8 +44,9 @@ local function CreateItem(yy, i, req, hidden, forceHeight)
 
 	
 	if req then
-		WBA_print("hi "..req.name..req.zone)
-		_G[ItemFrameName.."_message"]:SetText(req.name.. " "..req.zone)
+		_,_,_,classColor = GetClassColor(req.class)
+		classColorCode = "|c"..classColor
+		_G[ItemFrameName.."_message"]:SetText(classColorCode..req.name.. " |c00FFFFFF"..req.zone.." ")
 	end
 
 	local h = _G[ItemFrameName.."_message"]:GetStringHeight()

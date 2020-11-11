@@ -6,7 +6,7 @@ WBA.Initalized = false;
 WBA.AutoUpdateTimer=0
 WBA.UPDATETIMER=5
 
-WBA.TrackedZonesList = {"Ashenvale", "Feralas", "The Hinterlands", "Duskwood", "Azshara", "Blasted Lands", "Stormwind City", "Ruins of Ahn'Qiraj", "Ironforge", "Swamp of Sorrows", "Zul'Gurub"}
+WBA.TrackedZonesList = {"Ashenvale", "Feralas", "The Hinterlands", "Duskwood", "Azshara", "Blasted Lands", "Stormwind City", "Ruins of Ahn'Qiraj", "Ironforge", "Swamp of Sorrows", "Zul'Gurub", "Molten Core", "Temple of Ahn'Qiraj", "Ahn'Qiraj"}
 WBA.TrackedZones = {}
 
 function WBA.SaveAnchors()
@@ -183,9 +183,16 @@ function GetGuildiesOnline() -- Makes the GuildRoster request and prints the gui
 	end
 
 	-- print(dump(wba_history_snap))
-	
+	WBA_print("SORT TIME")
+	WBA_print(dump(wba_history_snap))
+	table.sort(wba_history_snap, function (l, r) 
+		return l.name < r.name
+	end)
+	WBA_print(dump(wba_history_snap))
+
 	wba_zone_strings = {}
 	for k, v in pairs(wba_history_snap) do
+
 		_,_,_,classColor = GetClassColor(v.class)
 		classColorCode = "|c"..classColor
 		if wba_zone_strings[v.zone] == nil then

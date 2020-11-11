@@ -160,39 +160,27 @@ SlashCmdList.RELOADUI = function()
     ReloadUI()
 end
 
-function GetGuildiesOnline() -- Makes the GuildRoster request and prints the guildies + locations
+function GetGuildiesOnline() -- Makes the GuildRoster request and returns the zone_strings
     GuildRoster()
-
-    wba_history_snap = {} -- all the guilds locations + metadata
-
-    -- Read the Guild Roster Info
+    wba_zone_snap = {} -- names and zones for all people we're interested in
 	numTotalGuildMembers, numOnlineGuildMembers, numOnlineAndMobileMembers = GetNumGuildMembers();
-	count = 1
     for i=0, numOnlineGuildMembers do
         name, rankName, rankIndex, level, classDisplayName, zone, publicNote, officerNote, isOnline, status, class, achievementPoints, achievementRank, isMobile, canSoR, repStanding, GUID = GetGuildRosterInfo(i)
 		if WBA.TrackedZones[zone] ~= nil then
-			
-			wba_history_snap_row = {};
-			wba_history_snap_row.name = StripServerName(name);
-			wba_history_snap_row.zone = zone;
-			wba_history_snap_row.class = class;
-			
-			wba_history_snap[count] = wba_history_snap_row;
-			count=count+1
+			wba_zone_snap_row = {};
+			wba_zone_snap_row.name = StripServerName(name);
+			wba_zone_snap_row.zone = zone;
+			wba_zone_snap_row.class = class;
+			table.insert(wba_zone_snap, wba_zone_snap_row);
 		end
 	end
 
-	-- print(dump(wba_history_snap))
-	WBA_print("SORT TIME")
-	WBA_print(dump(wba_history_snap))
-	table.sort(wba_history_snap, function (l, r) 
-		return l.name < r.name
+	table.sort(wba_zone_snap, function(a, b) 
+		return a.name < b.name
 	end)
-	WBA_print(dump(wba_history_snap))
 
 	wba_zone_strings = {}
-	for k, v in pairs(wba_history_snap) do
-
+	for k, v in pairs(wba_zone_snap) do
 		_,_,_,classColor = GetClassColor(v.class)
 		classColorCode = "|c"..classColor
 		if wba_zone_strings[v.zone] == nil then
@@ -203,11 +191,7 @@ function GetGuildiesOnline() -- Makes the GuildRoster request and prints the gui
 	end
 	for k, v in pairs(wba_zone_strings) do
 		v = v.."|c00FFFFFF";
-		WBA_print("ayy" ..v.."test")
 	end
-    --Todo: add metadata
-
-    -- print(dump(wba_zone_strings))
     return wba_zone_strings;
 end
 

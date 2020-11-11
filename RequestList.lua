@@ -4,26 +4,9 @@ function WBA.Clear()
 	if WBA.ClearNeeded or WBA.ClearTimer<time() then 
 		local newRequest={}
 		WBA.ClearTimer=WBA.MAXTIME
-				
-		-- for i,req in pairs(WBA.RequestList) do
-		-- 	if type(req) == "table" then
-		-- 		if req.last + WBA.DB.TimeOut * 3 > time() then
-		-- 			if req.last < WBA.ClearTimer then
-		-- 				WBA.ClearTimer=req.last
-		-- 			end
-		-- 			newRequest[#newRequest+1]=req			
-					
-		-- 		end
-		-- 	end
-		-- end
 		WBA.RequestList=newRequest	
-		WBA.ClearTimer=WBA.ClearTimer--+WBA.DB.TimeOut * 3
 		WBA.ClearNeeded=false
 	end		
-end
-
-local function requestSort(a,b)
-	return a.zone > b.zone
 end
 
 local LastZone
@@ -31,7 +14,6 @@ local lastIsFolded
 local function CreateHeader(yy, zone)
 	local AnchorTop="WorldBossAttendanceFrame_ScrollChildFrame"
 	local AnchorRight="WorldBossAttendanceFrame_ScrollChildFrame"
-	-- zone = zone:gsub("%s+", "")
 	local ItemFrameName="WBA.Zone_"..zone
 
 	if WBA.FramesEntries[zone]==nil then
@@ -71,14 +53,11 @@ end
 local function CreateItem(yy, i, req, hidden, forceHeight)
     local AnchorTop="WorldBossAttendanceFrame_ScrollChildFrame"
 	local AnchorRight="WorldBossAttendanceFrame_ScrollChildFrame"
-	-- i = i:gsub("%s+", "") .. "_players"
 	i = i .. "_players"
     local ItemFrameName="WBA.Item"..i
 
-	WBA_print("WBA.FramesEntries "..dump(WBA.FramesEntries))
 	if WBA.FramesEntries[i]==nil then
 		WBA.FramesEntries[i]=CreateFrame("Frame", ItemFrameName, WorldBossAttendanceFrame_ScrollChildFrame, "WorldBossAttendance_TmpRequest")
-		WBA_print("just created: ".. ItemFrameName)
 		WBA.FramesEntries[i]:SetPoint("RIGHT", _G[AnchorRight], "RIGHT", 0, 0)
 		_G[ItemFrameName.."_message"]:SetPoint("TOPLEFT")
 		_G[ItemFrameName.."_message"]:SetPoint("TOP",_G[ItemFrameName.."_name"], "TOP",0,0)
@@ -124,41 +103,27 @@ function WBA.UpdateList()
 	end
 
 	WBA.RequestList = GetGuildiesOnline()
-	table.sort(WBA.RequestList, requestSort)
-	
+	table.sort(WBA.RequestList, function(a,b)
+		return a.zone < b.zone
+	end)
 	for i, f in pairs(WBA.FramesEntries) do
 		f:Hide()
 	end
 
     local AnchorTop="WorldBossAttendanceFrame_ScrollChildFrame"
 	local AnchorRight="WorldBossAttendanceFrame_ScrollChildFrame"
-	local yy=0
-	lastZone=""
-	local count=0
-	local doCompact=1
 
     local itemHeight = CreateItem(yy,"nil",nil,true,nil)
 	WorldBossAttendanceFrame_ScrollFrame.ScrollBar.scrollStep=itemHeight*2
-	
-	WBA_print(dump(WBA.RequestList));
-	-- fill the list
-	for zone, playerString in pairs(WBA.RequestList) do
-		WBA_print("zone "..zone)
-		-- if LastZone ~= zone then
-		-- 	if LastZone~="" and WBA.FoldedZones[zone]~=true then
-		-- 		yy=yy+itemHeight+3
-		-- 	end
-			yy=CreateHeader(yy,zone)
-		-- end
 
+	for zone, playerString in pairs(WBA.RequestList) do
+		yy=CreateHeader(yy,zone)
 		if WBA.FoldedZones[zone]~=true then
 			yy=yy+CreateItem(yy,zone,playerString,false,itemHeight)+3
 		end
 	end
 	
 	WorldBossAttendanceFrame_ScrollChildFrame:SetHeight(yy)
-	
-
 end
 
 function WBA.ClickZone(self,button)
@@ -171,5 +136,4 @@ function WBA.ClickZone(self,button)
 		WBA.FoldedZones[id]=true
 	end
 	WBA.UpdateList()
-
 end

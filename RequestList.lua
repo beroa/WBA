@@ -49,14 +49,15 @@ local function CreateHeader(yy, zone)
 		yy=yy+10
 	end
 
+	local colTXT="";
 	if WBA.FoldedZones[zone]==true then
-		colTXT=colTXT.."[+] "
+		colTXT=colTXT.."|c00FF0000[+]|c00FFFFFF "
 		lastIsFolded=true
 	else
 		lastIsFolded=false
 	end
 
-	_G[ItemFrameName.."_name"]:SetText(zone)
+	_G[ItemFrameName.."_name"]:SetText(colTXT .. zone)
 						
 	WBA.FramesEntries[zone]:SetPoint("TOPLEFT",_G[AnchorTop], "TOPLEFT", 0,-yy)
 	WBA.FramesEntries[zone]:Show()
@@ -141,16 +142,18 @@ function WBA.UpdateList()
 	
 	WBA_print(dump(WBA.RequestList));
 	-- fill the list
-	for k, v in pairs(WBA.RequestList) do
-		WBA_print("k "..k)
-		if LastZone ~= k then
-			if LastZone~="" and WBA.FoldedZones[k]~=true then
-				yy=yy+itemHeight+3
-			end
-			yy=CreateHeader(yy,k)
-		end
+	for zone, playerString in pairs(WBA.RequestList) do
+		WBA_print("zone "..zone)
+		-- if LastZone ~= zone then
+		-- 	if LastZone~="" and WBA.FoldedZones[zone]~=true then
+		-- 		yy=yy+itemHeight+3
+		-- 	end
+			yy=CreateHeader(yy,zone)
+		-- end
 
-        yy=yy+CreateItem(yy,k,v,false,itemHeight)+3
+		if WBA.FoldedZones[zone]~=true then
+			yy=yy+CreateItem(yy,zone,playerString,false,itemHeight)+3
+		end
 	end
 	
 	WorldBossAttendanceFrame_ScrollChildFrame:SetHeight(yy)
@@ -158,15 +161,15 @@ function WBA.UpdateList()
 
 end
 
--- function WBA.ClickZone(self,button)
--- 	id=string.match(self:GetName(), "WBA.Zone_(.+)") 
--- 	if id==nil or id==0 then return end
+function WBA.ClickZone(self,button)
+	id=string.match(self:GetName(), "WBA.Zone_(.+)") 
+	if id==nil or id==0 then return end
 	
--- 	if WBA.FoldedZones[id] then
--- 		WBA.FoldedZones[id]=false
--- 	else
--- 		WBA.FoldedZones[id]=true
--- 	end
--- 	WBA.UpdateList()
+	if WBA.FoldedZones[id] then
+		WBA.FoldedZones[id]=false
+	else
+		WBA.FoldedZones[id]=true
+	end
+	WBA.UpdateList()
 
--- end
+end

@@ -136,9 +136,9 @@
 			</Layer>
 		</Layers>
 		<Scripts>
-			<!-- <OnMouseDown>
+			<OnMouseDown>
 				WorldBossAttendance_Addon.ClickZone(self,button)
-			</OnMouseDown>		 -->
+			</OnMouseDown>		
 		</Scripts>
 		
 	</Frame>	

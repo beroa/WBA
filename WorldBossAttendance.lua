@@ -6,8 +6,7 @@ WBA.Initalized = false;
 WBA.AutoUpdateTimer=0
 WBA.UPDATETIMER=5
 
-WBA.GuildList = {}
-WBA.TrackedZonesList = {"Ashenvale", "Feralas", "The Hinterlands", "Duskwood", "Azshara", "Blasted Lands", "Stormwind City"}
+WBA.TrackedZonesList = {"Ashenvale", "Feralas", "The Hinterlands", "Duskwood", "Azshara", "Blasted Lands", "Stormwind City", "Ruins of Ahn'Qiraj", "Ironforge"}
 WBA.TrackedZones = {}
 
 function WBA.SaveAnchors()
@@ -40,6 +39,7 @@ function WBA.Init()
 	-- Reset Request-List
 	WBA.RequestList={}
 	WBA.FramesEntries={}
+	WBA.FoldedZones={}
 	
 	-- Timer-Stuff
 	WBA.MAXTIME=time()+60*60*24*365 --add a year!
@@ -166,25 +166,42 @@ function GetGuildiesOnline() -- Makes the GuildRoster request and prints the gui
     wba_history_snap = {} -- all the guilds locations + metadata
 
     -- Read the Guild Roster Info
-    numTotalGuildMembers, numOnlineGuildMembers, numOnlineAndMobileMembers = GetNumGuildMembers();
-    for i=1, numOnlineGuildMembers do
+	numTotalGuildMembers, numOnlineGuildMembers, numOnlineAndMobileMembers = GetNumGuildMembers();
+	count = 1
+    for i=0, numOnlineGuildMembers do
         name, rankName, rankIndex, level, classDisplayName, zone, publicNote, officerNote, isOnline, status, class, achievementPoints, achievementRank, isMobile, canSoR, repStanding, GUID = GetGuildRosterInfo(i)
 		if WBA.TrackedZones[zone] ~= nil then
 			
-		
 			wba_history_snap_row = {};
 			wba_history_snap_row.name = StripServerName(name);
 			wba_history_snap_row.zone = zone;
 			wba_history_snap_row.class = class;
 			
-			wba_history_snap[GUID] = wba_history_snap_row;
+			wba_history_snap[count] = wba_history_snap_row;
+			count=count+1
 		end
-    end
-    
+	end
+
+	-- print(dump(wba_history_snap))
+	
+	wba_zone_strings = {}
+	for k, v in pairs(wba_history_snap) do
+		_,_,_,classColor = GetClassColor(v.class)
+		classColorCode = "|c"..classColor
+		if wba_zone_strings[v.zone] == nil then
+			wba_zone_strings[v.zone] = classColorCode .. v.name .. " "
+		else
+			wba_zone_strings[v.zone] = wba_zone_strings[v.zone] .. classColorCode .. v.name .." "
+		end
+	end
+	for k, v in pairs(wba_zone_strings) do
+		v = v.."|c00FFFFFF";
+		WBA_print("ayy" ..v.."test")
+	end
     --Todo: add metadata
 
-    -- print(dump(wba_history_snap))
-    return wba_history_snap;
+    -- print(dump(wba_zone_strings))
+    return wba_zone_strings;
 end
 
 -- UTILITY: Removes the server name from the player name

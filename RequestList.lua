@@ -101,9 +101,7 @@ function WBA.UpdateList()
 	end
 
 	WBA.RequestList = GetGuildiesOnline()
-	table.sort(WBA.RequestList, function(a,b)
-		return a.zone < b.zone
-	end)
+	
 	for zone, f in pairs(WBA.FramesEntries) do
 		f:Hide()
 	end
@@ -115,10 +113,15 @@ function WBA.UpdateList()
     local itemHeight = CreateItem(yy,"nil",nil,true,nil)
 	WorldBossAttendanceFrame_ScrollFrame.ScrollBar.scrollStep=itemHeight*2
 
-	for zone, playerString in pairs(WBA.RequestList) do
-		yy=CreateHeader(yy,zone)
-		if WBA.FoldedZones[zone]~=true then
-			yy=yy+CreateItem(yy,zone,playerString,false,nil)+3
+	-- sort the zones before displaying
+	local zoneKeys = {};
+	for k in pairs(WBA.RequestList) do table.insert(zoneKeys, k) end
+	table.sort(zoneKeys)
+	
+	for key, value in ipairs(zoneKeys) do 
+		yy=CreateHeader(yy,value)
+		if WBA.FoldedZones[value]~=true then
+			yy=yy+CreateItem(yy,value,WBA.RequestList[value],false,nil)+3
 		end
 	end
 	

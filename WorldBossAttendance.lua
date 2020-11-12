@@ -160,7 +160,7 @@ end
 
 function GetGuildiesOnline() -- Makes the GuildRoster request and returns the zone_strings
     GuildRoster()
-    wba_zone_snap = {} -- names and zones for all people we're interested in
+    wba_zone_snap = {} -- raw names and zones for all people we're interested in
 	numTotalGuildMembers, numOnlineGuildMembers, numOnlineAndMobileMembers = GetNumGuildMembers();
     for i=0, numOnlineGuildMembers do
         name, rankName, rankIndex, level, classDisplayName, zone, publicNote, officerNote, isOnline, status, class, achievementPoints, achievementRank, isMobile, canSoR, repStanding, GUID = GetGuildRosterInfo(i)
@@ -177,16 +177,17 @@ function GetGuildiesOnline() -- Makes the GuildRoster request and returns the zo
 		return a.name < b.name
 	end)
 
-	wba_zone_strings = {}
+	wba_zone_strings = {} -- key:value of zones:"strings containing player names", already colored
 	for k, v in pairs(wba_zone_snap) do
 		_,_,_,classColor = GetClassColor(v.class)
 		classColorCode = "|c"..classColor
 		if wba_zone_strings[v.zone] == nil then
-			wba_zone_strings[v.zone] = classColorCode .. v.name .. "|c00FFFFFF  "
+			wba_zone_strings[v.zone] = classColorCode .. v.name .. "|c00FFFFFF"
 		else
-			wba_zone_strings[v.zone] = wba_zone_strings[v.zone] .. classColorCode .. v.name .."|c00FFFFFF "
+			wba_zone_strings[v.zone] = wba_zone_strings[v.zone] .. ", " .. classColorCode .. v.name .."|c00FFFFFF"
 		end
 	end
+
     return wba_zone_strings;
 end
 

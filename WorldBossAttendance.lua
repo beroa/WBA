@@ -6,7 +6,7 @@ WBA.Initalized = false;
 WBA.AutoUpdateTimer=0
 WBA.UPDATETIMER=5
 
-WBA.TrackedZonesList = {"Ashenvale", "Feralas", "The Hinterlands", "Duskwood", "Azshara", "Blasted Lands", "Stormwind City", "Ruins of Ahn'Qiraj", "Ironforge", "Swamp of Sorrows", "Zul'Gurub", "Molten Core", "Temple of Ahn'Qiraj", "Ahn'Qiraj"}
+WBA.TrackedZonesList = {"Ashenvale", "Feralas", "The Hinterlands", "Duskwood", "Azshara", "Blasted Lands", "Stormwind City", "Ruins of Ahn'Qiraj", "Ironforge", "Swamp of Sorrows", "Zul'Gurub", "Molten Core", "Temple of Ahn'Qiraj", "Ahn'Qiraj", "Dire Maul"}
 WBA.TrackedZones = {}
 
 function WBA.SaveAnchors()
@@ -17,7 +17,7 @@ function WBA.SaveAnchors()
 end
 
 function WBA.Init()
-	WorldBossAttendanceFrame:SetMinResize(300,170)	
+	WorldBossAttendanceFrame:SetMinResize(300,300)
 	
 	WBA.UserLevel=UnitLevel("player")
 	WBA.UserName=(UnitFullName("player"))
@@ -64,7 +64,7 @@ function WBA.Init()
 	
 	WBA.ResizeFrameList()
 	
-	WBA.Tool.EnableSize(WorldBossAttendanceFrame,8,nil,function()	
+	WBA.Tool.EnableSize(WorldBossAttendanceFrame,8,nil,function()
 		WBA.ResizeFrameList()
 		WBA.SaveAnchors()
 		WBA.UpdateList()
@@ -88,7 +88,6 @@ function WBA.OnLoad()
         WBA.ToggleWindow()
     end
     
-    WorldBossAttendanceFrame:SetMinResize(300,300)
     WBA.ResizeFrameList()
     WBA.Tool.EnableSize(WorldBossAttendanceFrame,16,nil,function() -- Resizing with LibGPI
 		WBA.ResizeFrameList()
@@ -103,9 +102,7 @@ end
 
 function WBA.OnUpdate()
 	if WBA.Initalized==true then
-		-- WBA_print(WBA.AutoUpdateTimer)
-		-- WBA_print("cur: "..time())
-		if WBA.AutoUpdateTimer<time() then-- or WBA.ClearNeeded then			
+		if WBA.AutoUpdateTimer<time() or WBA.ClearNeeded then
 			WBA.UpdateList()			
 		end	
 	end
@@ -136,6 +133,7 @@ function WBA.OnSizeChanged()
 	if WBA.Initalized==true then
 		WBA.ResizeFrameList()
 	end
+	WBA.ClearNeeded = true;
 end
 
 function WBA.ResizeFrameList()
@@ -184,13 +182,10 @@ function GetGuildiesOnline() -- Makes the GuildRoster request and returns the zo
 		_,_,_,classColor = GetClassColor(v.class)
 		classColorCode = "|c"..classColor
 		if wba_zone_strings[v.zone] == nil then
-			wba_zone_strings[v.zone] = classColorCode .. v.name .. " "
+			wba_zone_strings[v.zone] = classColorCode .. v.name .. "|c00FFFFFF  "
 		else
-			wba_zone_strings[v.zone] = wba_zone_strings[v.zone] .. classColorCode .. v.name .." "
+			wba_zone_strings[v.zone] = wba_zone_strings[v.zone] .. classColorCode .. v.name .."|c00FFFFFF "
 		end
-	end
-	for k, v in pairs(wba_zone_strings) do
-		v = v.."|c00FFFFFF";
 	end
     return wba_zone_strings;
 end

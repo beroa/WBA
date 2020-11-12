@@ -17,13 +17,13 @@ local function CreateHeader(yy, zone)
 	local ItemFrameName="WBA.Zone_"..zone
 
 	if WBA.FramesEntries[zone]==nil then
-		WBA.FramesEntries[zone]=CreateFrame("Frame",ItemFrameName , WorldBossAttendanceFrame_ScrollChildFrame, "WorldBossAttendance_TmpHeader")
+		WBA.FramesEntries[zone]=CreateFrame("Frame", ItemFrameName, WorldBossAttendanceFrame_ScrollChildFrame, "WorldBossAttendance_TmpHeader")
 		WBA.FramesEntries[zone]:SetPoint("RIGHT", _G[AnchorRight], "RIGHT", 0, 0)						
 		_G[ItemFrameName.."_name"]:SetPoint("RIGHT",WBA.FramesEntries[zone], "RIGHT", 0,0)
 		local fname,h=_G[ItemFrameName.."_name"]:GetFont()
-		
 		_G[ItemFrameName.."_name"]:SetHeight(h)
 		_G[ItemFrameName]:SetHeight(h+5)
+		
 		
 	end
 
@@ -50,26 +50,24 @@ local function CreateHeader(yy, zone)
 end
 
 -- yy is the items height, used in setting the height of the ScrollChildFrame
-local function CreateItem(yy, i, req, hidden, forceHeight)
+local function CreateItem(yy, zone, req, hidden, forceHeight)
     local AnchorTop="WorldBossAttendanceFrame_ScrollChildFrame"
 	local AnchorRight="WorldBossAttendanceFrame_ScrollChildFrame"
-	i = i .. "_players"
-    local ItemFrameName="WBA.Item"..i
+	zone = zone .. "_players"
+    local ItemFrameName="WBA.Item_"..zone
 
-	if WBA.FramesEntries[i]==nil then
-		WBA.FramesEntries[i]=CreateFrame("Frame", ItemFrameName, WorldBossAttendanceFrame_ScrollChildFrame, "WorldBossAttendance_TmpRequest")
-		WBA.FramesEntries[i]:SetPoint("RIGHT", _G[AnchorRight], "RIGHT", 0, 0)
+	if WBA.FramesEntries[zone]==nil then
+		WBA.FramesEntries[zone]=CreateFrame("Frame", ItemFrameName, WorldBossAttendanceFrame_ScrollChildFrame, "WorldBossAttendance_TmpRequest")
+		WBA.FramesEntries[zone]:SetPoint("RIGHT", _G[AnchorRight], "RIGHT", 0, 0)
 		_G[ItemFrameName.."_message"]:SetPoint("TOPLEFT")
 		_G[ItemFrameName.."_message"]:SetPoint("TOP",_G[ItemFrameName.."_name"], "TOP",0,0)
-		_G[ItemFrameName.."_message"]:SetNonSpaceWrap(false)
-		if WBA.DontTrunicate then
-			WBA.ClearNeeded=true
-		end
+		_G[ItemFrameName.."_message"]:SetPoint("RIGHT",WBA.FramesEntries[zone], "RIGHT", 0,0)
+		_G[ItemFrameName.."_message"]:SetMaxLines(99)
 	end
 
-	WBA.FramesEntries[i]:SetHeight(999)
+	WBA.FramesEntries[zone]:SetHeight(999)
 	_G[ItemFrameName.."_message"]:SetHeight(999)
-
+	_G[ItemFrameName.."_message"]:SetMaxLines(99)
 	
 	if req then
 		_G[ItemFrameName.."_message"]:SetText(req)
@@ -81,14 +79,14 @@ local function CreateItem(yy, i, req, hidden, forceHeight)
 		h = forceHeight
 	end
 
-	WBA.FramesEntries[i]:SetPoint("TOPLEFT",_G[AnchorTop], "TOPLEFT", 10,-yy)
+	WBA.FramesEntries[zone]:SetPoint("TOPLEFT",_G[AnchorTop], "TOPLEFT", 10,-yy)
 	_G[ItemFrameName.."_message"]:SetHeight(h+10)
-	WBA.FramesEntries[i]:SetHeight(h)
+	WBA.FramesEntries[zone]:SetHeight(h)
 
 	if hidden then
-		WBA.FramesEntries[i]:Hide()
+		WBA.FramesEntries[zone]:Hide()
 	else
-		WBA.FramesEntries[i]:Show()
+		WBA.FramesEntries[zone]:Show()
 	end
 
     return h
@@ -106,12 +104,13 @@ function WBA.UpdateList()
 	table.sort(WBA.RequestList, function(a,b)
 		return a.zone < b.zone
 	end)
-	for i, f in pairs(WBA.FramesEntries) do
+	for zone, f in pairs(WBA.FramesEntries) do
 		f:Hide()
 	end
 
     local AnchorTop="WorldBossAttendanceFrame_ScrollChildFrame"
 	local AnchorRight="WorldBossAttendanceFrame_ScrollChildFrame"
+	local yy=0;
 
     local itemHeight = CreateItem(yy,"nil",nil,true,nil)
 	WorldBossAttendanceFrame_ScrollFrame.ScrollBar.scrollStep=itemHeight*2
@@ -119,7 +118,7 @@ function WBA.UpdateList()
 	for zone, playerString in pairs(WBA.RequestList) do
 		yy=CreateHeader(yy,zone)
 		if WBA.FoldedZones[zone]~=true then
-			yy=yy+CreateItem(yy,zone,playerString,false,itemHeight)+3
+			yy=yy+CreateItem(yy,zone,playerString,false,nil)+3
 		end
 	end
 	

@@ -92,30 +92,6 @@
 					</Frame>
 				</ScrollChild>
 			</ScrollFrame>
-
-			<!-- <ScrollingMessageFrame enableMouseWheel="true" name="WorldBossAttendanceFrame_GuildieFrame"  parentKey="MessageFrame" enableMouseClicks="true" >
-				<Anchors>
-					<Anchor point="TOPLEFT">
-						<Offset>
-							<AbsDimension x="10" y="-30"/>
-						</Offset>
-					</Anchor>
-					<Anchor point="BOTTOMRIGHT">
-						<Offset>
-							<AbsDimension x="-10" y="30"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-				<Size>
-					<AbsDimension x="100" y="1000"/>
-				</Size>
-				<Scripts>
-					<OnMouseWheel>
-						WorldBossAttendance_Addon.ScrollGroupList(self,delta)
-					</OnMouseWheel>
-				</Scripts>
-						
-			</ScrollingMessageFrame> -->
 		</Frames>
 		<Scripts>
 			<OnLoad>
@@ -127,7 +103,7 @@
 		</Scripts>
 	</Frame>
 
-<Frame hidden="false" name="WorldBossAttendance_TmpHeader" virtual="true">
+	<Frame hidden="false" name="WorldBossAttendance_TmpHeader" virtual="true">
 		<Layers>
 			<Layer level="ARTWORK">				
 				<FontString name="$parent_name" text="samplezone" inherits="GameFontNormal" maxLines="1" justifyH="LEFT" justifyV="TOP">
@@ -140,8 +116,8 @@
 				WorldBossAttendance_Addon.ClickZone(self,button)
 			</OnMouseDown>		
 		</Scripts>
-		
-	</Frame>	
+	</Frame>
+
 	<Frame hidden="false" name="WorldBossAttendance_TmpRequest" virtual="true">
 		<Layers>
 			<Layer level="ARTWORK">				
@@ -149,20 +125,7 @@
 					<color b="1" g="1" r="1" a="1"/>
 				</FontString>
 			</Layer>
-		</Layers>
-		<Scripts>
-			<!-- <OnMouseDown>
-				WorldBossAttendance_Addon.ClickRequest(self,button)
-			</OnMouseDown>
-			<OnEnter>
-				WorldBossAttendance_Addon.RequestShowTooltip(self)
-			</OnEnter>
-			<OnLeave>
-				WorldBossAttendance_Addon.RequestHideTooltip(self)
-			</OnLeave>					 -->
-		</Scripts>
-		
+		</Layers>		
 	</Frame>	
-
 
 </Ui>

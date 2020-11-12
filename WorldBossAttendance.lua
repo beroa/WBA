@@ -6,7 +6,7 @@ WBA.Initalized = false;
 WBA.AutoUpdateTimer=0
 WBA.UPDATETIMER=5
 
-WBA.TrackedZonesList = {"Ashenvale", "Feralas", "The Hinterlands", "Duskwood", "Azshara", "Blasted Lands", "Stormwind City", "Ruins of Ahn'Qiraj", "Ironforge", "Swamp of Sorrows", "Zul'Gurub", "Molten Core", "Temple of Ahn'Qiraj", "Ahn'Qiraj", "Dire Maul"}
+WBA.TrackedZonesList = {"Ashenvale", "Feralas", "The Hinterlands", "Duskwood", "Azshara", "Blasted Lands"}
 WBA.TrackedZones = {}
 
 function WBA.SaveAnchors()

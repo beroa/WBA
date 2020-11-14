@@ -102,7 +102,6 @@ function WBA.UpdateList()
 
 	WorldBossAttendanceFrameTime:SetText(WBA_datetime())
 	
-
 	WBA.RequestList = GetGuildiesOnline()
 	
 	for zone, f in pairs(WBA.FramesEntries) do

@@ -89,17 +89,6 @@ function WBA.OnLoad()
 	end
 	SLASH_WBA1 = "/wba"
 	SLASH_WBA2 = "/worldbossattendance"
-	
-	-- SlashCmdList["FRAMESTK"] = function()
-	-- 	LoadAddOn('Blizzard_DebugTools')
-	-- 	FrameStackTooltip_Toggle()
-	-- end
-	-- SLASH_FRAMESTK1 = "/fs" -- For quicker access to frame stack
-
-	-- SlashCmdList["RELOADUI"] = function()
-	-- 	ReloadUI()
-	-- end
-	-- SLASH_RELOADUI1 = "/rl" -- For quicker reload
 
     WBA.ResizeFrameList()
     WBA.Tool.EnableSize(WorldBossAttendanceFrame,16,nil,function() -- Resizing with LibGPI
@@ -123,29 +112,8 @@ function WBA_SlashCommand(msg)
 			command = string.lower(command);
 		end
 
-		-- WBA_print("command: "..command)
-		-- WBA_print("command: "..params)
-
 		if command == "" then
 			WBA.ToggleWindow()
-		-- elseif (command == "timezone" or command == "t") then
-		-- 	WBA_print("timezone")
-		-- 	if (string.len(params) > 0) then
-		-- 		if ((nil ~= tonumber(params)) and (tonumber(params) == math.floor(params))) then
-		-- 			local timezone = tonumber(params);
-		-- 			WBA.DB.timezone = timezone;
-		-- 			if (0 < timezone) then timezone = "+" .. timezone; end
-		-- 			WBA_print("Time Offset now set to: "..timezone.." seconds");
-		-- 		else
-		-- 			WBA_print("Time Offset parameter must be an integer number of seconds, you defined: \""..params.."\"");
-		-- 		end
-		-- 	else
-		-- 		if (0 == WBA.DB.timezone) then
-		-- 			WBA_print("Time Offset is not set");
-		-- 		else
-		-- 			WBA_print("Time Offset set to: "..WBA.DB.timezone);
-		-- 		end
-		-- 	end
 		else 
 			WBA_print("Unrecognized Command. The only command is '/wba'.")
 		end

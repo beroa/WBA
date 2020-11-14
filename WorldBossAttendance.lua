@@ -23,8 +23,8 @@ function WBA.Init()
 	WBA.UserName=(UnitFullName("player"))
 	WBA.ServerName=GetRealmName()
 
-	DEFAULT_CHAT_FRAME:AddMessage("init ran")
-		
+	WBA_print("Ready!")
+
 	-- Initalize options
 	if not WorldBossAttendanceDB then WorldBossAttendanceDB = {} end -- fresh DB
 	if not WorldBossAttendanceDBChar then WorldBossAttendanceDBChar = {} end -- fresh DB
@@ -51,7 +51,7 @@ function WBA.Init()
 	for k, v in pairs(WBA.TrackedZonesList) do
 		WBA.TrackedZones[v] = 1
 	end
-		
+	
 	local x, y, w, h = WBA.DB.X, WBA.DB.Y, WBA.DB.Width, WBA.DB.Height
 	if not x or not y or not w or not h then
 		WBA.SaveAnchors()
@@ -83,11 +83,24 @@ end
 function WBA.OnLoad()
 	WBA.Tool.RegisterEvent("ADDON_LOADED",Event_ADDON_LOADED)
 
-    SLASH_WBA1 = "/wba"
-    SlashCmdList.WBA = function()
-        WBA.ToggleWindow()
-    end
-    
+    -- Register the slash command
+    SlashCmdList["WBA"] = function(msg)
+        WBA_SlashCommand(msg)
+	end
+	SLASH_WBA1 = "/wba"
+	SLASH_WBA2 = "/worldbossattendance"
+	
+	-- SlashCmdList["FRAMESTK"] = function()
+	-- 	LoadAddOn('Blizzard_DebugTools')
+	-- 	FrameStackTooltip_Toggle()
+	-- end
+	-- SLASH_FRAMESTK1 = "/fs" -- For quicker access to frame stack
+
+	-- SlashCmdList["RELOADUI"] = function()
+	-- 	ReloadUI()
+	-- end
+	-- SLASH_RELOADUI1 = "/rl" -- For quicker reload
+
     WBA.ResizeFrameList()
     WBA.Tool.EnableSize(WorldBossAttendanceFrame,16,nil,function() -- Resizing with LibGPI
 		WBA.ResizeFrameList()
@@ -97,6 +110,46 @@ function WBA.OnLoad()
     WBA.Initalized = true
 
     WBA.Tool.OnUpdate(WBA.OnUpdate)
+end
+
+function WBA_SlashCommand(msg)
+	if (msg) then
+		local command = string.trim(msg);
+		local params = "";
+
+		if (string.find(command," ") ~= nul) then
+			command = string.sub(command,0,string.find(command," ")-1);
+			params  = string.trim(string.sub(msg,string.find(msg,command)+string.len(command)));
+			command = string.lower(command);
+		end
+
+		-- WBA_print("command: "..command)
+		-- WBA_print("command: "..params)
+
+		if command == "" then
+			WBA.ToggleWindow()
+		-- elseif (command == "timezone" or command == "t") then
+		-- 	WBA_print("timezone")
+		-- 	if (string.len(params) > 0) then
+		-- 		if ((nil ~= tonumber(params)) and (tonumber(params) == math.floor(params))) then
+		-- 			local timezone = tonumber(params);
+		-- 			WBA.DB.timezone = timezone;
+		-- 			if (0 < timezone) then timezone = "+" .. timezone; end
+		-- 			WBA_print("Time Offset now set to: "..timezone.." seconds");
+		-- 		else
+		-- 			WBA_print("Time Offset parameter must be an integer number of seconds, you defined: \""..params.."\"");
+		-- 		end
+		-- 	else
+		-- 		if (0 == WBA.DB.timezone) then
+		-- 			WBA_print("Time Offset is not set");
+		-- 		else
+		-- 			WBA_print("Time Offset set to: "..WBA.DB.timezone);
+		-- 		end
+		-- 	end
+		else 
+			WBA_print("Unrecognized Command. The only command is '/wba'.")
+		end
+	end
 end
 
 
@@ -147,16 +200,6 @@ end
 ---------------------------------------------------------
 -- debugging utilies
 ---------------------------------------------------------
-SLASH_FRAMESTK1 = "/fs" -- For quicker access to frame stack
-SlashCmdList.FRAMESTK = function()
-    LoadAddOn('Blizzard_DebugTools')
-    FrameStackTooltip_Toggle()
-end
-
-SLASH_RELOADUI1 = "/rl" -- For quicker reload
-SlashCmdList.RELOADUI = function()
-    ReloadUI()
-end
 
 function GetGuildiesOnline() -- Makes the GuildRoster request and returns the zone_strings
     GuildRoster()
@@ -229,3 +272,15 @@ function dump(o)
        return tostring(o)
     end
  end
+
+function WBA_datetime()
+	local d = C_DateAndTime.GetTodaysDate()-- C_DateAndTime.GetDateFromEpoch(GetServerTime()*1e6)
+	local weekDay = CALENDAR_WEEKDAY_NAMES[d.weekDay]:sub(1,3)
+	local month = CALENDAR_FULLDATE_MONTH_NAMES[d.month]:sub(1,3)
+	local hrs, mins = GetGameTime() -- gives server time.
+
+	local localDate = date()
+	local secs = localDate:sub(localDate:len()-6, localDate:len()-5)
+
+	return format("%s %s %d, %02d:%02d:%s", weekDay, month, d.day, hrs, mins, secs)
+end

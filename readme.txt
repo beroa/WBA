@@ -5,7 +5,7 @@ WBA creates a simple UI panel which displays all of your guild members which are
 It makes it easy to take a screenshot of who, in your guild, attended the world boss, and it will all fit in a single screenshot unlike using the default guild viewer.
 
 Usage
-WBA scans your guilds location at least every 5 seconds when the main window is open and displays the information in the window.
+WBA scans your guilds location at most every 5 seconds when the main window is open and displays the information in the window.
 
 Slash Commands
 /wba - open main window
